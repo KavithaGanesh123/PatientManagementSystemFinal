@@ -18,6 +18,10 @@ import com.patient.patientmanagement.schemaobjects.PatientDetailsSO;
 import com.patient.patientmanagement.schemaobjects.PatientIdentifierSO;
 import com.patient.patientmanagement.util.GenericUtils;
 
+/**
+ * @author KL105911
+ *
+ */
 @Component
 public class PatientDao {
 
@@ -27,6 +31,16 @@ public class PatientDao {
 	@Autowired
 	private PatientDetailsRepository patientDetailsRepository;
 
+	/**
+	 * 
+	 * * This method saves the new patient details.	
+	 * 
+	 * @param patientDetailsSO Patient object
+	 * 
+	 * @return PatientDetailsSO Return saved Patient object
+	 * 
+	 * @throws ValidationException Throws ValidationException
+	 */
 	public PatientDetailsSO savePatientDetails(PatientDetailsSO patientDetailsSO) throws ValidationException {
 
 		Patient newPatient = new Patient();
@@ -69,6 +83,15 @@ public class PatientDao {
 		return newPatientDetailsSO;
 	}
 
+	
+	/**
+	 * @param patientDetailsSO Details of patient matching
+	 * patien_id, name or government id.
+	 * 
+	 * @return Returns list of patients matching the search
+	 * 
+	 * @throws ValidationException Throws ValidationException
+	 */
 	public List<PatientDetailsSO> getPatientDetails(PatientDetailsSO patientDetailsSO) throws ValidationException {
 
 		Patient patient = new Patient();
@@ -106,6 +129,16 @@ public class PatientDao {
 		return patientDetailsSOList;
 	}
 
+	/**
+	 * 
+	 * * This method deletes or removes the existing patient.	
+	 * 
+	 * @param patientDetailsSO Patient object
+	 * 
+	 * @return String Success or Failed removing patient
+	 * 
+	 * @throws ValidationException Throws ValidationException
+	 */
 	public String removePatientDetails(PatientDetailsSO patientDetailsSO) throws ValidationException {
 
 		String msg = "";
@@ -114,6 +147,7 @@ public class PatientDao {
 		}
 
 		if (patientDetailsSO.getPatientId() != 0) {
+			
 
 			Patient existingPatient = patientDetailsRepository.getPatientDetailsById(patientDetailsSO.getPatientId());
 			if (existingPatient == null) {
@@ -129,13 +163,23 @@ public class PatientDao {
 		return msg;
 	}
 
+	/**
+	 * 
+	 * * This method updates the existing patient details
+	 * 
+	 * @param patientDetailsSO Patient object
+	 * 
+	 * @return PatientDetailsSO Return the updated patient details
+	 * 
+	 * @throws ValidationException Throws ValidationException
+	 */
 	public PatientDetailsSO updatePatientDetails(PatientDetailsSO patientDetailsSO) throws ValidationException {
 
 		PatientDetailsSO newPatientDetailsSO = new PatientDetailsSO();
 		
 
 		if (patientDetailsSO.getPatientId() != 0) {
-			Patient patientToUpdate = patientDetailsRepository.getOne(patientDetailsSO.getPatientId());
+			Patient patientToUpdate = patientDetailsRepository.getPatientDetailsById(patientDetailsSO.getPatientId());
 
 			try {
 				genericUtils.copyProperties(patientDetailsSO, patientToUpdate);
@@ -170,6 +214,15 @@ public class PatientDao {
 		return newPatientDetailsSO;
 	}
 
+	/**
+	 * 
+	 * * This method copies Patient Object to PatientSO Object
+	 * 
+	 * @param patientDetailsSO, Patient 
+	 * 
+	 * @return patientDetailsSO
+	 * 
+	 */
 	public PatientDetailsSO copyPatientToPatientSO(PatientDetailsSO patientDetailsSO, Patient patient) {
 
 		try {

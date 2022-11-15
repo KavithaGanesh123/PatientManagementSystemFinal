@@ -10,6 +10,10 @@ import org.springframework.stereotype.Repository;
 import com.patient.patientmanagement.entity.Patient;
 
 
+/**
+ * @author KL105911
+ *
+ */
 @Repository
 
 public interface PatientDetailsRepository extends JpaRepository<Patient, Long>{

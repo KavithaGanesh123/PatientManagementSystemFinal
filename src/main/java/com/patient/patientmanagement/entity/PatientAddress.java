@@ -12,6 +12,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
+/**
+ * @author KL105911
+ *
+ */
 @Entity
 @Table(name = "PATIENT_ADDRESS")
 public class PatientAddress {

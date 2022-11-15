@@ -3,6 +3,10 @@ package com.patient.patientmanagement.schemaobjects;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author KL105911
+ *
+ */
 public class PatientDetailsSO {
 	
 	private long patientId;
@@ -28,7 +32,7 @@ public class PatientDetailsSO {
 	}
 
 	/**
-	 * @param patient_id the patient_id to set
+	 * @param patientId the patientId to set
 	 */
 	public void setPatientId(long patientId) {
 		this.patientId = patientId;

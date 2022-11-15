@@ -14,6 +14,10 @@ import com.patient.patientmanagement.schemaobjects.PatientDetailsSO;
 import com.patient.patientmanagement.service.PatientManagementService;
 import java.util.List;
 
+/**
+ * @author KL105911
+ *
+ */
 @RestController
 @RequestMapping("/patient")
 public class PatientManagementController {

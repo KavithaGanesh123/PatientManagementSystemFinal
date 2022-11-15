@@ -5,6 +5,10 @@ import java.lang.reflect.InvocationTargetException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author KL105911
+ *
+ */
 @Component
 public class GenericUtils {
 	

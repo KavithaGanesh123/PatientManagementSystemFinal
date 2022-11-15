@@ -1,5 +1,9 @@
 package com.patient.patientmanagement.schemaobjects;
 
+/**
+ * @author KL105911
+ *
+ */
 public class AddressListSO {
 	
 	private String addressLine1;

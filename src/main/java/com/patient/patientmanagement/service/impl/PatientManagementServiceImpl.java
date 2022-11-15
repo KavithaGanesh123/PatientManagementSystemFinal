@@ -11,6 +11,10 @@ import com.patient.patientmanagement.schemaobjects.PatientDetailsSO;
 import com.patient.patientmanagement.service.PatientManagementService;
 import com.patient.patientmanagement.dao.PatientDao;
 
+/**
+ * @author KL105911
+ *
+ */
 @Service
 
 public class PatientManagementServiceImpl implements PatientManagementService {
