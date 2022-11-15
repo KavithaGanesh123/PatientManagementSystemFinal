@@ -12,7 +12,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class GenericUtils {
 	
-	 public void copyProperties(Object dest, Object orig) throws IllegalAccessException,InvocationTargetException {
+	 /**
+	 * @param dest Object to be copied
+	 * @param orig Source Object
+	 * @throws IllegalAccessException Throws IllegalAccessException
+	 * @throws InvocationTargetException Throws InvocationTargetException
+	 */
+	public void copyProperties(Object dest, Object orig) throws IllegalAccessException,InvocationTargetException {
 			if ((dest != null) && (orig != null)) {
 			BeanUtils.copyProperties(dest, orig);
 			}

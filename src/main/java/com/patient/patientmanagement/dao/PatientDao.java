@@ -218,7 +218,8 @@ public class PatientDao {
 	 * 
 	 * * This method copies Patient Object to PatientSO Object
 	 * 
-	 * @param patientDetailsSO, Patient 
+	 * @param patientDetailsSO Patient schema object
+	 * @param patient Patient entity object
 	 * 
 	 * @return patientDetailsSO
 	 * 
