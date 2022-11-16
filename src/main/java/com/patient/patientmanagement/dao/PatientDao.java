@@ -8,7 +8,11 @@ import javax.xml.bind.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 
+import com.patient.patientmanagement.constants.PatientConstants;
 import com.patient.patientmanagement.entity.Patient;
 import com.patient.patientmanagement.entity.PatientAddress;
 import com.patient.patientmanagement.entity.PatientIdentifier;
@@ -17,6 +21,7 @@ import com.patient.patientmanagement.schemaobjects.AddressListSO;
 import com.patient.patientmanagement.schemaobjects.PatientDetailsSO;
 import com.patient.patientmanagement.schemaobjects.PatientIdentifierSO;
 import com.patient.patientmanagement.util.GenericUtils;
+import com.patient.patientmanagement.validators.PatientValidator;
 
 /**
  * @author KL105911
@@ -30,10 +35,14 @@ public class PatientDao {
 
 	@Autowired
 	private PatientDetailsRepository patientDetailsRepository;
+	
+	@Autowired
+	   private PatientValidator patientValidator;
+	   
 
 	/**
 	 * 
-	 * * This method saves the new patient details.	
+	 * * This method saves the new patient details.
 	 * 
 	 * @param patientDetailsSO Patient object
 	 * 
@@ -41,11 +50,17 @@ public class PatientDao {
 	 * 
 	 * @throws ValidationException Throws ValidationException
 	 */
-	public PatientDetailsSO savePatientDetails(PatientDetailsSO patientDetailsSO) throws ValidationException {
+	public PatientDetailsSO savePatientDetails(PatientDetailsSO patientDetailsSO) {
 
 		Patient newPatient = new Patient();
 
 		PatientDetailsSO newPatientDetailsSO = new PatientDetailsSO();
+		// BeanPropertyBindingResult errors = new BeanPropertyBindingResult(patientDetailsSO, "patientDetailsSO");
+		//ValidationUtils.invokeValidator(this.patientValidator, patientDetailsSO, (Errors)errors);
+		
+		//if(errors.getErrorCount() > 0){
+		//	throw new ValidationException(errors.get);
+		//	}
 
 		try {
 			genericUtils.copyProperties(patientDetailsSO, newPatient);
@@ -69,24 +84,27 @@ public class PatientDao {
 			throw new RuntimeException(e);
 		}
 
+		try {
 		newPatient = patientDetailsRepository.saveAndFlush(newPatient);
+		}catch(Exception e) {
+			newPatientDetailsSO.setStatusMsg(PatientConstants.SAVE_FAILED);
+		}
 
 		try {
 			genericUtils.copyProperties(newPatient, newPatientDetailsSO);
-			
-
+			newPatientDetailsSO=copyPatientToPatientSO(newPatientDetailsSO, newPatient);
 			newPatientDetailsSO.setPatientId(newPatient.getPatientId());
 		} catch (IllegalAccessException | InvocationTargetException e) {
 			throw new RuntimeException(e);
 		}
 
+		newPatientDetailsSO.setStatusMsg(PatientConstants.SAVE_SUCCESS);
 		return newPatientDetailsSO;
 	}
 
-	
 	/**
-	 * @param patientDetailsSO Details of patient matching
-	 * patien_id, name or government id.
+	 * @param patientDetailsSO Details of patient matching patien_id, name or
+	 *                         government id.
 	 * 
 	 * @return Returns list of patients matching the search
 	 * 
@@ -99,6 +117,7 @@ public class PatientDao {
 		PatientDetailsSO newPatientDetailsSO = new PatientDetailsSO();
 
 		List<PatientDetailsSO> patientDetailsSOList = new ArrayList<>();
+		
 
 		if (patientDetailsSO.getPatientId() != 0) {
 			patient = patientDetailsRepository.getPatientDetailsById(patientDetailsSO.getPatientId());
@@ -106,7 +125,7 @@ public class PatientDao {
 			patientDetailsSOList.add(patientDetailsSO);
 		}
 
-		else if (patientDetailsSO.getPatientName() != null) {
+		else if (patientDetailsSO.getPatientName() != null && !patientDetailsSO.getPatientName().isEmpty()) {
 			List<Patient> patientList = patientDetailsRepository
 					.getPatientDetailsByName(patientDetailsSO.getPatientName());
 			for (Patient patientObj : patientList) {
@@ -116,22 +135,38 @@ public class PatientDao {
 			}
 		}
 
-		else if (patientDetailsSO.getPatientIdentifiers().size() > 0) {
+		else if (patientDetailsSO.getPatientIdentifiers()!=null && patientDetailsSO.getPatientIdentifiers().size() > 0) {
 
 			if (patientDetailsSO.getPatientIdentifiers().size() == 1) {
 
-				PatientIdentifier patientIdentifier = new PatientIdentifier();
+				PatientIdentifierSO patientIdentifier = patientDetailsSO.getPatientIdentifiers().get(0);
 				patient = patientDetailsRepository.getPatientDetailsByGovtId(patientIdentifier.getIdentifierNumber());
-				patientDetailsSO = copyPatientToPatientSO(newPatientDetailsSO, patient);
+				if (patient != null) {
+					patientDetailsSO = copyPatientToPatientSO(newPatientDetailsSO, patient);
+					patientDetailsSOList.add(patientDetailsSO);
+				}
 			}
 		}
+		else {
+			
+
+			List<Patient> patientList = patientDetailsRepository
+					.findAll();
+			for (Patient patientObj : patientList) {
+				PatientDetailsSO newPatientDetailSO = new PatientDetailsSO();
+				newPatientDetailsSO = copyPatientToPatientSO(newPatientDetailSO, patientObj);
+				patientDetailsSOList.add(newPatientDetailsSO);
+			}
+		
+		}
+		
 
 		return patientDetailsSOList;
 	}
 
 	/**
 	 * 
-	 * * This method deletes or removes the existing patient.	
+	 * * This method deletes or removes the existing patient.
 	 * 
 	 * @param patientDetailsSO Patient object
 	 * 
@@ -147,7 +182,6 @@ public class PatientDao {
 		}
 
 		if (patientDetailsSO.getPatientId() != 0) {
-			
 
 			Patient existingPatient = patientDetailsRepository.getPatientDetailsById(patientDetailsSO.getPatientId());
 			if (existingPatient == null) {
@@ -176,7 +210,6 @@ public class PatientDao {
 	public PatientDetailsSO updatePatientDetails(PatientDetailsSO patientDetailsSO) throws ValidationException {
 
 		PatientDetailsSO newPatientDetailsSO = new PatientDetailsSO();
-		
 
 		if (patientDetailsSO.getPatientId() != 0) {
 			Patient patientToUpdate = patientDetailsRepository.getPatientDetailsById(patientDetailsSO.getPatientId());
@@ -205,7 +238,14 @@ public class PatientDao {
 				throw new RuntimeException(e);
 			}
 
-			patientToUpdate = patientDetailsRepository.saveAndFlush(patientToUpdate);
+			try {
+				patientToUpdate = patientDetailsRepository.saveAndFlush(patientToUpdate);
+				
+				newPatientDetailsSO.setStatusMsg(null);
+			}catch(Exception e) {
+				
+			}
+			
 
 			newPatientDetailsSO = copyPatientToPatientSO(patientDetailsSO, patientToUpdate);
 
@@ -219,7 +259,7 @@ public class PatientDao {
 	 * * This method copies Patient Object to PatientSO Object
 	 * 
 	 * @param patientDetailsSO Patient schema object
-	 * @param patient Patient entity object
+	 * @param patient          Patient entity object
 	 * 
 	 * @return patientDetailsSO
 	 * 
@@ -229,20 +269,25 @@ public class PatientDao {
 		try {
 			genericUtils.copyProperties(patient, patientDetailsSO);
 			List<AddressListSO> patientAddressSOList = new ArrayList<>();
-			for (PatientAddress patientAddress : patient.getPatientAddresses()) {
-				AddressListSO addressSO = new AddressListSO();
-				genericUtils.copyProperties(patientAddress, addressSO);
-				patientAddressSOList.add(addressSO);
+			if (!patient.getPatientAddresses().isEmpty()) {
+				for (PatientAddress patientAddress : patient.getPatientAddresses()) {
+					AddressListSO addressSO = new AddressListSO();
+					genericUtils.copyProperties(patientAddress, addressSO);
+					patientAddressSOList.add(addressSO);
+				}
+				patientDetailsSO.setPatientAddresses(patientAddressSOList);
 			}
-			patientDetailsSO.setPatientAddresses(patientAddressSOList);
 
 			List<PatientIdentifierSO> patientIdentifierSOList = new ArrayList<>();
-			for (PatientIdentifier patientIdentifier : patient.getPatientIdentifier()) {
-				PatientIdentifierSO identifierSO = new PatientIdentifierSO();
-				genericUtils.copyProperties(patientIdentifier, identifierSO);
-				patientIdentifierSOList.add(identifierSO);
+
+			if (!patient.getPatientIdentifier().isEmpty()) {
+				for (PatientIdentifier patientIdentifier : patient.getPatientIdentifier()) {
+					PatientIdentifierSO identifierSO = new PatientIdentifierSO();
+					genericUtils.copyProperties(patientIdentifier, identifierSO);
+					patientIdentifierSOList.add(identifierSO);
+				}
+				patientDetailsSO.setPatientIdentifiers(patientIdentifierSOList);
 			}
-			patientDetailsSO.setPatientIdentifiers(patientIdentifierSOList);
 
 		} catch (IllegalAccessException | InvocationTargetException e) {
 			throw new RuntimeException(e);

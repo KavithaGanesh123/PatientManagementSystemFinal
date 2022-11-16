@@ -23,7 +23,7 @@ public class PatientManagementServiceImpl implements PatientManagementService {
 	private PatientDao patientDao;
 
 	@Override
-	public PatientDetailsSO savePatientDetails(PatientDetailsSO patientDetailsSO) throws ValidationException
+	public PatientDetailsSO savePatientDetails(PatientDetailsSO patientDetailsSO) 
 
 	{
 		return patientDao.savePatientDetails(patientDetailsSO);

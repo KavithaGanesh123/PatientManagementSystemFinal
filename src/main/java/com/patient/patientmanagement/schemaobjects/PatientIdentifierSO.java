@@ -37,6 +37,25 @@ public class PatientIdentifierSO {
 	public void setIdentifierNumber(String identifierNumber) {
 		this.identifierNumber = identifierNumber;
 	}
+	
+	
+	 /**
+	  * 
+	  * Constructor to set patientIdentifier schema object
+	  * 
+	 * @param identifierType
+	 * @param identifierNumber
+	 */
+	public PatientIdentifierSO(String identifierType, String identifierNumber) {
+
+
+	        this.identifierType = identifierType;
+	        this.identifierNumber = identifierNumber;             
+	    }
+
+	public PatientIdentifierSO() {
+		// TODO Auto-generated constructor stub
+	}
 
 	
 

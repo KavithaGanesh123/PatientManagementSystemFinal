@@ -23,6 +23,9 @@ public class PatientDetailsSO {
 	private String contactNumber;
 	
 	private String alternateContactNumber;
+	
+	private String statusMsg;
+	
 
 	/**
 	 * @return the patient_id
@@ -121,6 +124,20 @@ public class PatientDetailsSO {
 	 */
 	public void setPatientIdentifiers(List<PatientIdentifierSO> patientIdentifiers) {
 		this.patientIdentifiers = patientIdentifiers;
+	}
+
+	/**
+	 * @return the statusMsg
+	 */
+	public String getStatusMsg() {
+		return statusMsg;
+	}
+
+	/**
+	 * @param statusMsg the statusMsg to set
+	 */
+	public void setStatusMsg(String statusMsg) {
+		this.statusMsg = statusMsg;
 	}
 	
 

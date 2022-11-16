@@ -13,7 +13,7 @@ import com.patient.patientmanagement.schemaobjects.PatientDetailsSO;
  */
 public interface PatientManagementService {
 	
-	public PatientDetailsSO savePatientDetails(PatientDetailsSO patientDetailsSO) throws ValidationException;
+	public PatientDetailsSO savePatientDetails(PatientDetailsSO patientDetailsSO);
 	
 	public List<PatientDetailsSO> getPatientDetails(PatientDetailsSO patientDetailsSO) throws ValidationException;
 	

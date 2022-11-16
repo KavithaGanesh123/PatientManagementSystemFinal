@@ -28,8 +28,15 @@ public class PatientManagementController {
 	private static final Logger		logger	= LoggerFactory.getLogger(PatientManagementController.class);
 
 	
+	/**
+	 * Controller Request to save new patient details
+	 * 
+	 * @param patientDetailsSO Patient Details for save
+	 * @return
+	 * @throws ValidationException Throws ValidationException
+	 */
 	@RequestMapping(value = "/savePatientDetails", produces = "application/json")
-	public @ResponseBody PatientDetailsSO savePatientDetails(@RequestBody PatientDetailsSO patientDetailsSO) throws ValidationException
+	public @ResponseBody PatientDetailsSO savePatientDetails(@RequestBody PatientDetailsSO patientDetailsSO)
 	{
 		logger.info("Inside the PatientManagementController.savePatientDetails method..");
 		
@@ -37,6 +44,13 @@ public class PatientManagementController {
 		return patientDetailsSO;
 	}
 	
+	/**
+	 * Controller Request to get patient details
+	 * 
+	 * @param patientDetailsSO
+	 * @return
+	 * @throws ValidationException
+	 */
 	@RequestMapping(value = "/getPatientDetails", produces = "application/json")
 	public @ResponseBody List<PatientDetailsSO> getPatientDetails(@RequestBody PatientDetailsSO patientDetailsSO) throws ValidationException
 	{
@@ -46,6 +60,14 @@ public class PatientManagementController {
 		return patientDetailsSOList;
 	}
 	
+	/**
+	 * 
+	 * Controller Request to update patient details
+	 * 
+	 * @param patientDetailsSO
+	 * @return
+	 * @throws ValidationException
+	 */
 	@RequestMapping(value = "/updatePatientDetails", produces = "application/json")
 	public @ResponseBody PatientDetailsSO updatePatientDetails(@RequestBody PatientDetailsSO patientDetailsSO) throws ValidationException
 	{
@@ -55,6 +77,14 @@ public class PatientManagementController {
 		return patientDetailsSO;
 	}
 	
+	/**
+	 * 
+	 * Controller Request to remove patient details
+	 * 
+	 * @param patientDetailsSO
+	 * @return
+	 * @throws ValidationException
+	 */
 	@RequestMapping(value = "/removePatientDetails", produces = "application/json")
 	public  String removePatientDetails(@RequestBody PatientDetailsSO patientDetailsSO) throws ValidationException
 	{

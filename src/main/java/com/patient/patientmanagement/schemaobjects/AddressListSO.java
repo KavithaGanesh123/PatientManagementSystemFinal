@@ -88,6 +88,28 @@ public class AddressListSO {
 	}
 	
 	
-	
+    /**
+     * 
+     * Constructore to set address object
+     * 
+     * @param addressLine1
+     * @param addressLine2
+     * @param state
+     * @param country
+     * @param pincode
+     */
+    public AddressListSO(String addressLine1, String addressLine2, String state, String country, String pincode) {
+
+
+        this.addressLine1 = addressLine1;
+        this.addressLine2 = addressLine1;             
+        this.state = state;
+        this.country = country;
+        this.pincode = pincode;
+    }
+
+	public AddressListSO() {
+		// TODO Auto-generated constructor stub
+	}
 
 }

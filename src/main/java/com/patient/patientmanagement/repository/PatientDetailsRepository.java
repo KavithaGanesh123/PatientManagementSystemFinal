@@ -34,7 +34,7 @@ public interface PatientDetailsRepository extends JpaRepository<Patient, Long>{
 	 * @param patientName Patient Name
 	 * @return Patient List of patients
 	 */
-	@Query("SELECT pd FROM Patient pd WHERE  pd.patientName=:patientName" )
+	@Query("SELECT pd FROM Patient pd WHERE  pd.patientName like %:patientName%" )
 	List<Patient> getPatientDetailsByName (@Param("patientName") String patientName);
 	
 	/**
