@@ -178,17 +178,17 @@ public class PatientDao {
 
 		String msg = "";
 		if (patientDetailsSO.getPatientId() == 0) {
-			msg = "Please enter a valid Patient ID";
+			msg = PatientConstants.PATIENTID_EMPTY;
 		}
 
 		if (patientDetailsSO.getPatientId() != 0) {
 
 			Patient existingPatient = patientDetailsRepository.getPatientDetailsById(patientDetailsSO.getPatientId());
 			if (existingPatient == null) {
-				msg = "Invalid Patient ID";
+				msg = PatientConstants.INVALID_PATIENT;
 			} else {
 				patientDetailsRepository.deleteById(patientDetailsSO.getPatientId());
-				msg = "Patient Successfully Deleted";
+				msg = PatientConstants.DELETE_SUCCESS;
 
 			}
 

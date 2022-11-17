@@ -5,14 +5,14 @@ package com.patient.patientmanagement.schemaobjects;
  *
  */
 public class AddressListSO {
-	
+
 	private String addressLine1;
 	private String addressLine2;
-	
+
 	private String state;
-	
+
 	private String country;
-	
+
 	private String pincode;
 
 	/**
@@ -42,8 +42,6 @@ public class AddressListSO {
 	public void setAddressLine2(String addressLine2) {
 		this.addressLine2 = addressLine2;
 	}
-
-	
 
 	/**
 	 * @return the state
@@ -86,27 +84,25 @@ public class AddressListSO {
 	public void setPincode(String pincode) {
 		this.pincode = pincode;
 	}
-	
-	
-    /**
-     * 
-     * Constructore to set address object
-     * 
-     * @param addressLine1
-     * @param addressLine2
-     * @param state
-     * @param country
-     * @param pincode
-     */
-    public AddressListSO(String addressLine1, String addressLine2, String state, String country, String pincode) {
 
+	/**
+	 * 
+	 * Constructore to set address object
+	 * 
+	 * @param addressLine1
+	 * @param addressLine2
+	 * @param state
+	 * @param country
+	 * @param pincode
+	 */
+	public AddressListSO(String addressLine1, String addressLine2, String state, String country, String pincode) {
 
-        this.addressLine1 = addressLine1;
-        this.addressLine2 = addressLine1;             
-        this.state = state;
-        this.country = country;
-        this.pincode = pincode;
-    }
+		this.addressLine1 = addressLine1;
+		this.addressLine2 = addressLine1;
+		this.state = state;
+		this.country = country;
+		this.pincode = pincode;
+	}
 
 	public AddressListSO() {
 		// TODO Auto-generated constructor stub
