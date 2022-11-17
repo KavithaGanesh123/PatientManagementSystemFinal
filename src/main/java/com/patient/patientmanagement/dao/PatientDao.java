@@ -62,7 +62,6 @@ public class PatientDao {
 		//	throw new ValidationException(errors.get);
 		//	}
 
-		try {
 			genericUtils.copyProperties(patientDetailsSO, newPatient);
 			List<PatientAddress> patientAddressList = new ArrayList<>();
 			for (AddressListSO address : patientDetailsSO.getPatientAddresses()) {
@@ -80,25 +79,19 @@ public class PatientDao {
 			}
 			newPatient.setPatientIdentifier(patientIdentifierList);
 
-		} catch (IllegalAccessException | InvocationTargetException e) {
-			throw new RuntimeException(e);
-		}
 
 		try {
 		newPatient = patientDetailsRepository.saveAndFlush(newPatient);
+		newPatientDetailsSO.setStatusMsg(PatientConstants.SAVE_SUCCESS);
 		}catch(Exception e) {
 			newPatientDetailsSO.setStatusMsg(PatientConstants.SAVE_FAILED);
 		}
 
-		try {
 			genericUtils.copyProperties(newPatient, newPatientDetailsSO);
 			newPatientDetailsSO=copyPatientToPatientSO(newPatientDetailsSO, newPatient);
 			newPatientDetailsSO.setPatientId(newPatient.getPatientId());
-		} catch (IllegalAccessException | InvocationTargetException e) {
-			throw new RuntimeException(e);
-		}
 
-		newPatientDetailsSO.setStatusMsg(PatientConstants.SAVE_SUCCESS);
+	
 		return newPatientDetailsSO;
 	}
 
@@ -206,53 +199,59 @@ public class PatientDao {
 	 * @return PatientDetailsSO Return the updated patient details
 	 * 
 	 * @throws ValidationException Throws ValidationException
+	 * @throws InvocationTargetException 
+	 * @throws IllegalAccessException 
 	 */
-	public PatientDetailsSO updatePatientDetails(PatientDetailsSO patientDetailsSO) throws ValidationException {
+	public PatientDetailsSO updatePatientDetails(Patient patientDetailsSO) throws ValidationException {
 
 		PatientDetailsSO newPatientDetailsSO = new PatientDetailsSO();
 
 		if (patientDetailsSO.getPatientId() != 0) {
 			Patient patientToUpdate = patientDetailsRepository.getPatientDetailsById(patientDetailsSO.getPatientId());
-
-			try {
-				genericUtils.copyProperties(patientDetailsSO, patientToUpdate);
-				patientToUpdate.getPatientAddresses().clear();
-				List<PatientAddress> patientAddressList = new ArrayList<>();
-				for (AddressListSO address : patientDetailsSO.getPatientAddresses()) {
-					PatientAddress patientAddress = new PatientAddress();
-					genericUtils.copyProperties(address, patientAddress);
-					patientAddressList.add(patientAddress);
-				}
-
-				patientToUpdate.setPatientAddresses(patientAddressList);
-				List<PatientIdentifier> patientIdentifierList = new ArrayList<>();
-				patientToUpdate.getPatientIdentifier().clear();
-				for (PatientIdentifierSO identifier : patientDetailsSO.getPatientIdentifiers()) {
-					PatientIdentifier patientIdentifier = new PatientIdentifier();
-					genericUtils.copyProperties(identifier, patientIdentifier);
-					patientIdentifierList.add(patientIdentifier);
-				}
-				patientToUpdate.setPatientIdentifier(patientIdentifierList);
-
-			} catch (IllegalAccessException | InvocationTargetException e) {
-				throw new RuntimeException(e);
-			}
-
-			try {
-				patientToUpdate = patientDetailsRepository.saveAndFlush(patientToUpdate);
-				
-				newPatientDetailsSO.setStatusMsg(null);
-			}catch(Exception e) {
-				
-			}
 			
-
-			newPatientDetailsSO = copyPatientToPatientSO(patientDetailsSO, patientToUpdate);
-
+			if(patientToUpdate != null) {
+				genericUtils.copyProperties(patientDetailsSO, patientToUpdate);
+				
+				patientDetailsSO = patientDetailsRepository.saveAndFlush(patientToUpdate);
+				
+				genericUtils.copyProperties(patientDetailsSO, newPatientDetailsSO);
+				
+			}
 		}
 
 		return newPatientDetailsSO;
 	}
+
+//			try {
+////				genericUtils.copyProperties(patientDetailsSO, patientToUpdate);
+////				patientToUpdate.getPatientAddresses().clear();
+////				List<PatientAddress> patientAddressList = new ArrayList<>();
+////				for (AddressListSO address : patientDetailsSO.getPatientAddresses()) {
+////					PatientAddress patientAddress = new PatientAddress();
+////					genericUtils.copyProperties(address, patientAddress);
+////					patientAddressList.add(patientAddress);
+////				}
+////
+////				patientToUpdate.setPatientAddresses(patientAddressList);
+////				List<PatientIdentifier> patientIdentifierList = new ArrayList<>();
+////				patientToUpdate.getPatientIdentifier().clear();
+////				for (PatientIdentifierSO identifier : patientDetailsSO.getPatientIdentifiers()) {
+////					PatientIdentifier patientIdentifier = new PatientIdentifier();
+////					genericUtils.copyProperties(identifier, patientIdentifier);
+////					patientIdentifierList.add(patientIdentifier);
+////				}
+////				patientToUpdate.setPatientIdentifier(patientIdentifierList);
+//				
+//				try {
+//					patientToUpdate = patientDetailsRepository.saveAndFlush(patientToUpdate);
+//					
+//					newPatientDetailsSO.setStatusMsg(null);
+//				}catch(Exception e) {
+//					
+//				}
+				
+				
+		
 
 	/**
 	 * 
@@ -266,7 +265,6 @@ public class PatientDao {
 	 */
 	public PatientDetailsSO copyPatientToPatientSO(PatientDetailsSO patientDetailsSO, Patient patient) {
 
-		try {
 			genericUtils.copyProperties(patient, patientDetailsSO);
 			List<AddressListSO> patientAddressSOList = new ArrayList<>();
 			if (!patient.getPatientAddresses().isEmpty()) {
@@ -289,9 +287,6 @@ public class PatientDao {
 				patientDetailsSO.setPatientIdentifiers(patientIdentifierSOList);
 			}
 
-		} catch (IllegalAccessException | InvocationTargetException e) {
-			throw new RuntimeException(e);
-		}
 
 		return patientDetailsSO;
 

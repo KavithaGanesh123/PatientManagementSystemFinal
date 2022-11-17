@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.patient.patientmanagement.entity.Patient;
 import com.patient.patientmanagement.schemaobjects.PatientDetailsSO;
 import com.patient.patientmanagement.service.PatientManagementService;
 import java.util.List;
@@ -69,11 +70,11 @@ public class PatientManagementController {
 	 * @throws ValidationException
 	 */
 	@RequestMapping(value = "/updatePatientDetails", produces = "application/json")
-	public @ResponseBody PatientDetailsSO updatePatientDetails(@RequestBody PatientDetailsSO patientDetailsSO) throws ValidationException
+	public @ResponseBody PatientDetailsSO updatePatientDetails(@RequestBody Patient patient) throws ValidationException
 	{
 		logger.info("Inside the PatientManagementController.savePatientDetails method..");
 		
-		 patientDetailsSO=patientManagementService.updatePatientDetails(patientDetailsSO);
+		PatientDetailsSO patientDetailsSO=patientManagementService.updatePatientDetails(patient);
 		return patientDetailsSO;
 	}
 	

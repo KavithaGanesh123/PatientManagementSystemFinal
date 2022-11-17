@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.xml.bind.ValidationException;
 
-
+import com.patient.patientmanagement.entity.Patient;
 import com.patient.patientmanagement.schemaobjects.PatientDetailsSO;
 
 /**
@@ -39,7 +39,7 @@ public interface PatientManagementService {
 	 * @return
 	 * @throws ValidationException
 	 */
-	public PatientDetailsSO updatePatientDetails(PatientDetailsSO patientDetailsSO) throws ValidationException;
+	public PatientDetailsSO updatePatientDetails(Patient patientDetailsSO) throws ValidationException;
 	
 	/**
 	 * 

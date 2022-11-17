@@ -18,7 +18,7 @@ public class GenericUtils {
 	 * @throws IllegalAccessException Throws IllegalAccessException
 	 * @throws InvocationTargetException Throws InvocationTargetException
 	 */
-	public void copyProperties(Object dest, Object orig) throws IllegalAccessException,InvocationTargetException {
+	public void copyProperties(Object dest, Object orig)  {
 			if ((dest != null) && (orig != null)) {
 			BeanUtils.copyProperties(dest, orig);
 			}

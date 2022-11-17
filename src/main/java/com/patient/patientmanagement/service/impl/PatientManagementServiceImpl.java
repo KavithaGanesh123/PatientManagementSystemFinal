@@ -7,9 +7,10 @@ import javax.xml.bind.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.patient.patientmanagement.dao.PatientDao;
+import com.patient.patientmanagement.entity.Patient;
 import com.patient.patientmanagement.schemaobjects.PatientDetailsSO;
 import com.patient.patientmanagement.service.PatientManagementService;
-import com.patient.patientmanagement.dao.PatientDao;
 
 /**
  * @author KL105911
@@ -60,7 +61,7 @@ public class PatientManagementServiceImpl implements PatientManagementService {
 	 * @throws ValidationException
 	 */
 	@Override
-	public PatientDetailsSO updatePatientDetails(PatientDetailsSO patientDetailsSO) throws ValidationException
+	public PatientDetailsSO updatePatientDetails(Patient patientDetailsSO) throws ValidationException
 
 	{
 		return patientDao.updatePatientDetails(patientDetailsSO);
